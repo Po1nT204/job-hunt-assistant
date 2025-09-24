@@ -1,0 +1,384 @@
+openapi: 3.0.0
+info:
+  title: API платформы для поиска стажировок
+  description: |-
+    REST API для сервиса стажировок и подработок для студентов.
+    Ключевой сценарий: Регистрация/вход -> Поиск вакансии -> Подача отклика -> Просмотр статуса.
+  version: 1.0.0
+
+tags:
+  - name: Auth
+    description: Регистрация, авторизация и управление сессией
+  - name: Users
+    description: Действия с профилем пользователя
+  - name: Vacancies
+    description: Просмотр, поиск и управление вакансиями
+  - name: Applications
+    description: Подача и просмотр откликов на вакансии
+
+paths:
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Регистрация нового пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+      responses:
+        '201':
+          description: Пользователь успешно зарегистрирован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAuthResponse'
+        '400':
+          description: Ошибка валидации данных
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Пользователь с таким email уже существует
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Авторизация пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUser'
+      responses:
+        '200':
+          description: Успешная авторизация
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAuthResponse'
+        '401':
+          description: Неверный логин или пароль
+
+  /users/me:
+    get:
+      tags: [Users]
+      summary: Получить данные текущего пользователя
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Данные авторизованного пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Пользователь не авторизован
+
+  /vacancies:
+    get:
+      tags: [Vacancies]
+      summary: Получить список вакансий с фильтрацией
+      parameters:
+        - name: search
+          in: query
+          schema: { type: string }
+          description: Поиск по названию или описанию
+        - name: location
+          in: query
+          schema: { type: string }
+          description: Фильтр по городу
+      responses:
+        '200':
+          description: Список вакансий
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vacancy'
+    post:
+      tags: [Vacancies]
+      summary: Создание новой вакансии (для работодателей)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVacancy'
+      responses:
+        '201':
+          description: Вакансия успешно создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vacancy'
+        '400':
+          description: Ошибка валидации данных
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Требуется авторизация
+        '403':
+          description: Доступ запрещен (необходима роль работодателя)
+
+  /vacancies/{vacancyId}:
+    get:
+      tags: [Vacancies]
+      summary: Получить детали одной вакансии
+      parameters:
+        - name: vacancyId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 60d5ec49e73f8a001f3e8b8c
+      responses:
+        '200':
+          description: Детальная информация о вакансии
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vacancy'
+        '404':
+          description: Вакансия не найдена
+
+  /applications:
+    get:
+      tags: [Applications]
+      summary: Получить список моих откликов
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Список откликов текущего пользователя
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Application'
+        '401':
+          description: Требуется авторизация
+    post:
+      tags: [Applications]
+      summary: Подать отклик на вакансию
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApplication'
+      responses:
+        '201':
+          description: Отклик успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+        '400':
+          description: Ошибка валидации (например, неверный ID вакансии или вы уже откликались)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Требуется авторизация
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    CreateUser:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 50
+          example: Иван Иванов
+        email:
+          type: string
+          format: email
+          example: student@university.com
+        password:
+          type: string
+          minLength: 8
+          maxLength: 100
+          example: StrongPassword123
+        role:
+          type: string
+          enum: [student, employer]
+          example: student
+      required:
+        - name
+        - email
+        - password
+        - role
+
+    LoginUser:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: student@university.com
+        password:
+          type: string
+          minLength: 8
+          example: StrongPassword123
+      required:
+        - email
+        - password
+
+    UserAuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        user:
+          $ref: '#/components/schemas/User'
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 60d5ec49e73f8a001f3e8b8a
+        name:
+          type: string
+          example: Иван Иванов
+        email:
+          type: string
+          format: email
+          example: student@university.com
+        role:
+          type: string
+          enum: [student, employer, admin]
+          example: student
+
+    CreateVacancy:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 5
+          maxLength: 100
+          example: Младший веб-разработчик (стажер)
+        description:
+          type: string
+          minLength: 50
+          maxLength: 5000
+          example: Ищем талантливого студента для помощи в разработке...
+        location:
+          type: string
+          minLength: 2
+          example: Москва
+        salary:
+          type: integer
+          minimum: 0
+          example: 30000
+      required:
+        - title
+        - description
+        - location
+
+    Vacancy:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 60d5ec49e73f8a001f3e8b8c
+        title:
+          type: string
+          example: Младший веб-разработчик (стажер)
+        description:
+          type: string
+          example: Ищем талантливого студента для помощи в разработке...
+        location:
+          type: string
+          example: Москва
+        salary:
+          type: integer
+          example: 30000
+        companyId:
+          type: string
+          example: 60d5ec49e73f8a001f3e8b8d
+        createdAt:
+          type: string
+          format: date-time
+
+    CreateApplication:
+      type: object
+      properties:
+        vacancyId:
+          type: string
+          description: ID вакансии, на которую подается отклик
+          example: 60d5ec49e73f8a001f3e8b8c
+        # resumeId: # Можно добавить позже, когда будет функционал загрузки резюме
+        #   type: string
+        #   example: 60d5ec49e73f8a001f3e8b8e
+        coverLetter:
+          type: string
+          description: Сопроводительное письмо
+          minLength: 50
+          maxLength: 2000
+          example: Уважаемый HR-менеджер, меня очень заинтересовала ваша вакансия...
+      required:
+        - vacancyId
+        - coverLetter
+
+    Application:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 60d5ec49e73f8a001f3e8b8f
+        vacancyId:
+          type: string
+          example: 60d5ec49e73f8a001f3e8b8c
+        userId:
+          type: string
+          example: 60d5ec49e73f8a001f3e8b8a
+        status:
+          type: string
+          enum: [pending, reviewed, rejected, accepted]
+          example: pending
+        createdAt:
+          type: string
+          format: date-time
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Ошибка валидации
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                example: password
+              message:
+                type: string
+                example: Пароль должен содержать минимум 8 символов
+      required:
+        - message

@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const bcrypt = require('bcryptjs');
 
 exports.registerUser = async (req, res) => {
   // 1. Проверяем результаты валидации
@@ -45,6 +46,54 @@ exports.registerUser = async (req, res) => {
       (err, token) => {
         if (err) throw err;
         res.status(201).json({ token });
+      }
+    );
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server error');
+  }
+};
+
+exports.loginUser = async (req, res) => {
+  // Проверяем результаты валидации
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { email, password } = req.body;
+
+  try {
+    // Ищем пользователя по email
+    const user = await User.findOne({ email }).select('+password');
+
+    // Если пользователя нет, возвращаем ошибку
+    if (!user) {
+      return res.status(401).json({ msg: 'Invalid credentials' });
+    }
+
+    // Сравниваем введенный пароль с хэшем в базе данных
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    // Если пароли не совпадают, возвращаем ошибку
+    if (!isMatch) {
+      return res.status(401).json({ msg: 'Invalid credentials' });
+    }
+
+    // Если все хорошо, создаем и возвращаем JWT токен
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
+
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: '5h' },
+      (err, token) => {
+        if (err) throw err;
+        res.json({ token });
       }
     );
   } catch (error) {

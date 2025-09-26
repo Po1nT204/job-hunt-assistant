@@ -40,3 +40,12 @@ exports.isEmployer = (req, res, next) => {
     res.status(403).json({ msg: 'Access denied. Employer role required.' });
   }
 };
+
+// Middleware для проверки роли 'student'
+exports.isStudent = (req, res, next) => {
+  if (req.user && req.user.role === 'student') {
+    next();
+  } else {
+    res.status(403).json({ msg: 'Access denied. Student role required.' });
+  }
+};

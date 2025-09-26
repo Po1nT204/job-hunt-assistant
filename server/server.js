@@ -18,7 +18,8 @@ app.get('/', (req, res) => {
 });
 
 // Подключаем роуты
-app.use('/api/auth', authRoutes); // Все роуты из authRoutes будут с префиксом /api/auth
+app.use('/api/auth', authRoutes);
+app.use('/api/vacancies', require('./routes/vacancyRoutes'));
 
 const PORT = process.env.PORT || 5001;
 

@@ -27,3 +27,8 @@ export interface ILoginData {
   email: string;
   password: string;
 }
+
+export interface IApplicationData {
+  vacancyId: string;
+  coverLetter: string;
+}

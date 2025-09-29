@@ -1,9 +1,21 @@
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../app/providers/AuthProvider';
+import { toast } from 'react-toastify';
 
 export const Header = () => {
-  const { user } = useAuth();
+  const { user, logout, isLoading } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    toast.info('Вы вышли из системы');
+    navigate('/');
+  };
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <AppBar position='static'>
@@ -25,7 +37,9 @@ export const Header = () => {
               <Button color='inherit' component={Link} to='/profile'>
                 Профиль
               </Button>
-              {/* Здесь будет кнопка Logout */}
+              <Button color='inherit' onClick={handleLogout}>
+                Выйти
+              </Button>
             </>
           ) : (
             <>

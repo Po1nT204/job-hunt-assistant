@@ -28,13 +28,11 @@ export const LoginPage = () => {
       const { token } = await login(formData);
       localStorage.setItem('token', token);
 
-      // После успешного входа, так же как и при регистрации,
-      // получаем данные пользователя
       const { data: userData } = await api.get('/users/me');
       setUser(userData);
 
       toast.success('Вы успешно вошли!');
-      navigate('/vacancies'); // Перенаправляем на страницу с вакансиями
+      navigate('/vacancies');
     } catch (err: any) {
       const errorMessage =
         err.response?.data?.msg || 'Произошла ошибка при входе';

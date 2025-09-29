@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 const Application = require('../models/Application');
 const Vacancy = require('../models/Vacancy');
 
@@ -5,6 +6,16 @@ const Vacancy = require('../models/Vacancy');
 // @route   POST /api/applications
 // @access  Private (Student)
 exports.createApplication = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      message: 'Validation Error',
+      errors: errors
+        .array()
+        .map((err) => ({ field: err.path, message: err.msg })),
+    });
+  }
+
   const { vacancyId, coverLetter } = req.body;
 
   try {

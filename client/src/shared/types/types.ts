@@ -22,3 +22,8 @@ export interface IRegisterData {
   password: string;
   role: 'student' | 'employer';
 }
+
+export interface ILoginData {
+  email: string;
+  password: string;
+}

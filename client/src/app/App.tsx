@@ -12,25 +12,33 @@ import {
 } from '../pages';
 import { Header } from '../widgets/Header';
 import { AuthProvider } from './providers/AuthProvider';
+import { ProtectedRoute } from './providers/ProtectedRoute';
 
 export const App = () => {
   return (
-    <AuthProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
         <Header />
         <Container component='main' sx={{ mt: 4, mb: 4 }}>
           <Routes>
             <Route path='/' element={<HomePage />} />
             <Route path='/login' element={<LoginPage />} />
-            <Route path='/profile' element={<ProfilePage />} />
             <Route path='/register' element={<RegisterPage />} />
             <Route path='/vacancies' element={<VacanciesPage />} />
             <Route path='/vacancies/:id' element={<VacancyDetailPage />} />
+            <Route
+              path='/profile'
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </Container>
         {/* Здесь будет Footer */}
         <ToastContainer position='bottom-right' autoClose={3000} />
-      </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 };

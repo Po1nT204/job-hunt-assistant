@@ -19,6 +19,7 @@ app.get('/', (req, res) => {
 
 // Подключаем роуты
 app.use('/api/auth', authRoutes);
+app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/vacancies', require('./routes/vacancyRoutes'));
 app.use('/api/applications', require('./routes/applicationRoutes'));
 

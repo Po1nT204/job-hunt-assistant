@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 const Vacancy = require('../models/Vacancy');
 
 // @desc    Получить все вакансии
@@ -17,6 +18,15 @@ exports.getVacancies = async (req, res) => {
 // @route   POST /api/vacancies
 // @access  Private (Employer)
 exports.createVacancy = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      message: 'Validation Error',
+      errors: errors
+        .array()
+        .map((err) => ({ field: err.path, message: err.msg })),
+    });
+  }
   const { title, description, location, salary } = req.body;
 
   try {
@@ -65,6 +75,16 @@ exports.getVacancyById = async (req, res) => {
 // @route   PUT /api/vacancies/:id
 // @access  Private (Owner Employer)
 exports.updateVacancy = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      message: 'Validation Error',
+      errors: errors
+        .array()
+        .map((err) => ({ field: err.path, message: err.msg })),
+    });
+  }
+
   try {
     let vacancy = await Vacancy.findById(req.params.id);
 

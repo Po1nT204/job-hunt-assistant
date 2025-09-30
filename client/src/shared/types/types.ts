@@ -42,3 +42,10 @@ export interface IApplication {
     title: string;
   };
 }
+
+export interface IVacancyData {
+  title: string;
+  description: string;
+  location: string;
+  salary?: number;
+}

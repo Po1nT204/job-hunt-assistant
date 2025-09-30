@@ -4,3 +4,4 @@ export * from './ProfilePage';
 export * from './RegisterPage';
 export * from './VacanciesPage';
 export * from './VacancyDetailPage';
+export * from './VacancyCreatePage';

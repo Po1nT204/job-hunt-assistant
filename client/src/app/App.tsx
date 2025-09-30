@@ -8,6 +8,7 @@ import {
   ProfilePage,
   RegisterPage,
   VacanciesPage,
+  VacancyCreatePage,
   VacancyDetailPage,
 } from '../pages';
 import { Header } from '../widgets/Header';
@@ -31,6 +32,14 @@ export const App = () => {
               element={
                 <ProtectedRoute>
                   <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/vacancies/new'
+              element={
+                <ProtectedRoute>
+                  <VacancyCreatePage />
                 </ProtectedRoute>
               }
             />

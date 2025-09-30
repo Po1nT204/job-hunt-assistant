@@ -32,3 +32,13 @@ export interface IApplicationData {
   vacancyId: string;
   coverLetter: string;
 }
+
+export interface IApplication {
+  _id: string;
+  status: 'pending' | 'reviewed' | 'rejected' | 'accepted';
+  createdAt: string;
+  vacancy: {
+    _id: string;
+    title: string;
+  };
+}

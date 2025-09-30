@@ -1,5 +1,5 @@
 import api from './axios';
-import { IApplicationData } from '../types/types';
+import { IApplication, IApplicationData } from '../types/types';
 
 // Мы ожидаем, что в ответ придет созданный отклик
 // (хотя мы его пока не будем использовать, тип лучше определить)
@@ -18,5 +18,10 @@ export const createApplication = async (
     '/applications',
     applicationData
   );
+  return data;
+};
+
+export const getMyApplications = async (): Promise<IApplication[]> => {
+  const { data } = await api.get<IApplication[]>('/applications/my');
   return data;
 };

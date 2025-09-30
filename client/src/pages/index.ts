@@ -5,3 +5,4 @@ export * from './RegisterPage';
 export * from './VacanciesPage';
 export * from './VacancyDetailPage';
 export * from './VacancyCreatePage';
+export * from './VacancyEditPage';

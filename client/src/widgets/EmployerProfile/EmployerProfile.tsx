@@ -12,9 +12,10 @@ import {
   Button,
   IconButton,
 } from '@mui/material';
-// import EditIcon from '@mui/icons-material/Edit'; // <-- Раскомментируем позже
-// import DeleteIcon from '@mui/icons-material/Delete'; // <-- Раскомментируем позже
-import { getVacancies } from '../../shared/api/vacancyService';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { toast } from 'react-toastify';
+import { getVacancies, deleteVacancy } from '../../shared/api/vacancyService';
 import { IVacancy } from '../../shared/types/types';
 import { useAuth } from '../../app/providers/AuthProvider';
 
@@ -42,6 +43,20 @@ export const EmployerProfile = () => {
     fetchAndFilterVacancies();
   }, [user]);
 
+  const handleDelete = async (vacancyId: string) => {
+    if (window.confirm('Вы уверены, что хотите удалить эту вакансию?')) {
+      try {
+        await deleteVacancy(vacancyId);
+        toast.success('Вакансия удалена');
+        // Обновляем список вакансий, убирая из него удаленную
+        setMyVacancies((prev) => prev.filter((v) => v._id !== vacancyId));
+      } catch (error) {
+        toast.error('Не удалось удалить вакансию');
+        console.error(error);
+      }
+    }
+  };
+
   return (
     <Paper sx={{ p: 2 }}>
       <Box display='flex' justifyContent='space-between' alignItems='center'>
@@ -63,8 +78,21 @@ export const EmployerProfile = () => {
               divider
               secondaryAction={
                 <>
-                  {/* <IconButton edge="end" aria-label="edit"> <EditIcon /> </IconButton> */}
-                  {/* <IconButton edge="end" aria-label="delete"> <DeleteIcon /> </IconButton> */}
+                  <IconButton
+                    edge='end'
+                    aria-label='edit'
+                    component={RouterLink}
+                    to={`/vacancies/${vacancy._id}/edit`}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton
+                    edge='end'
+                    aria-label='delete'
+                    onClick={() => handleDelete(vacancy._id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
                 </>
               }
             >

@@ -10,6 +10,7 @@ import {
   VacanciesPage,
   VacancyCreatePage,
   VacancyDetailPage,
+  VacancyEditPage,
 } from '../pages';
 import { Header } from '../widgets/Header';
 import { AuthProvider } from './providers/AuthProvider';
@@ -40,6 +41,14 @@ export const App = () => {
               element={
                 <ProtectedRoute>
                   <VacancyCreatePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/vacancies/:id/edit'
+              element={
+                <ProtectedRoute>
+                  <VacancyEditPage />
                 </ProtectedRoute>
               }
             />

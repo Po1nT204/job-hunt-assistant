@@ -17,3 +17,15 @@ export const createVacancy = async (
   const { data } = await api.post<IVacancy>('/vacancies', vacancyData);
   return data;
 };
+
+export const updateVacancy = async (
+  id: string,
+  vacancyData: IVacancyData
+): Promise<IVacancy> => {
+  const { data } = await api.put<IVacancy>(`/vacancies/${id}`, vacancyData);
+  return data;
+};
+
+export const deleteVacancy = async (id: string): Promise<void> => {
+  await api.delete(`/vacancies/${id}`);
+};

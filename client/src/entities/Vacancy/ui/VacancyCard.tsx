@@ -7,7 +7,7 @@ import {
   Box,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { IVacancy } from '../../shared/types/types';
+import { IVacancy } from '../../../shared/types/types';
 
 interface VacancyCardProps {
   vacancy: IVacancy;

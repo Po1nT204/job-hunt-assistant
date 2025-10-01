@@ -4,6 +4,7 @@ import {
   Typography,
   Button,
   CardActions,
+  Box,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { IVacancy } from '../../shared/types/types';
@@ -19,9 +20,21 @@ export const VacancyCard = ({ vacancy }: VacancyCardProps) => {
         <Typography variant='h5' component='div'>
           {vacancy.title}
         </Typography>
-        <Typography sx={{ mb: 1.5 }} color='text.secondary'>
-          {vacancy.location}
-        </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            my: 1,
+          }}
+        >
+          <Typography color='text.secondary'>{vacancy.location}</Typography>
+          {vacancy.salary && (
+            <Typography variant='h6' component='span' color='primary.main'>
+              {vacancy.salary} руб.
+            </Typography>
+          )}
+        </Box>
         <Typography variant='body2'>
           {vacancy.description.substring(0, 150)}...
         </Typography>

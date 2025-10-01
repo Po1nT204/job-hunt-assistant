@@ -18,6 +18,7 @@ import { useAuth } from '../../app/providers/AuthProvider';
 import { register as registerUser } from '../../shared/api/authService';
 import { IRegisterData } from '../../shared/types/types';
 import api from '../../shared/api/axios';
+import { AxiosError } from 'axios';
 
 export const RegisterPage = () => {
   const { setUser } = useAuth();
@@ -33,16 +34,15 @@ export const RegisterPage = () => {
       const { token } = await registerUser(formData);
       localStorage.setItem('token', token);
 
-      // После успешной регистрации получаем данные пользователя
       const { data: userData } = await api.get('/users/me');
       setUser(userData);
 
       toast.success('Регистрация прошла успешно!');
-      navigate('/vacancies'); // Перенаправляем на страницу с вакансиями
-    } catch (err: any) {
-      // err.response.data.msg - это сообщение с бэкенда
+      navigate('/vacancies');
+    } catch (err) {
+      const error = err as AxiosError<{ msg: string }>;
       const errorMessage =
-        err.response?.data?.msg || 'Произошла ошибка при регистрации';
+        error.response?.data?.msg || 'Произошла ошибка при регистрации';
       toast.error(errorMessage);
       console.error(err);
     }

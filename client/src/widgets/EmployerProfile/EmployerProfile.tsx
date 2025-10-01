@@ -29,7 +29,6 @@ export const EmployerProfile = () => {
       if (!user) return;
       try {
         const allVacancies = await getVacancies();
-        // Фильтруем вакансии, чтобы показать только те, что создал текущий работодатель
         const filtered = allVacancies.filter(
           (vacancy) => vacancy.company._id === user._id
         );
@@ -48,7 +47,6 @@ export const EmployerProfile = () => {
       try {
         await deleteVacancy(vacancyId);
         toast.success('Вакансия удалена');
-        // Обновляем список вакансий, убирая из него удаленную
         setMyVacancies((prev) => prev.filter((v) => v._id !== vacancyId));
       } catch (error) {
         toast.error('Не удалось удалить вакансию');

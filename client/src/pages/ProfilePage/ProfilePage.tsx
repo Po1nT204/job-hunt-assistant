@@ -1,4 +1,3 @@
-// client/src/pages/ProfilePage/ProfilePage.tsx
 import { useAuth } from '../../app/providers/AuthProvider';
 import { Box, Typography, Paper, Grid, CircularProgress } from '@mui/material';
 import { StudentProfile, EmployerProfile } from '../../widgets/index';
@@ -16,7 +15,6 @@ export const ProfilePage = () => {
 
   return (
     <Grid container spacing={4}>
-      {/* Блок с информацией о пользователе (общий для всех) */}
       <Grid size={{ xs: 12, md: 3 }}>
         <Paper sx={{ p: 2, height: '100%' }}>
           <Typography variant='h5' gutterBottom>

@@ -27,7 +27,6 @@ const vacancyValidation = [
     .isNumeric({ no_symbols: true }),
 ];
 
-// Применяем валидацию к роутам создания (POST) и обновления (PUT)
 router
   .route('/')
   .get(getVacancies)

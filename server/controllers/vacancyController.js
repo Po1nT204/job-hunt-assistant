@@ -6,17 +6,13 @@ const Vacancy = require('../models/Vacancy');
 // @access  Public
 exports.getVacancies = async (req, res) => {
   try {
-    // Создаем объект для фильтрации
     const filter = {};
 
-    // 1. Обработка поискового запроса (search)
     if (req.query.search) {
       const searchRegex = new RegExp(req.query.search, 'i'); // 'i' для поиска без учета регистра
-      // Ищем совпадения в названии ИЛИ в описании
       filter.$or = [{ title: searchRegex }, { description: searchRegex }];
     }
 
-    // 2. Обработка фильтра по местоположению (location)
     if (req.query.location && req.query.location !== 'all') {
       const locationRegex = new RegExp(`^${req.query.location}$`, 'i');
       filter.location = locationRegex;
@@ -34,7 +30,6 @@ exports.getVacancies = async (req, res) => {
       sortOption = { createdAt: -1 };
     }
 
-    // 3. Выполняем поиск с учетом созданных фильтров
     const vacancies = await Vacancy.find(filter)
       .populate('company', 'name email')
       .sort(sortOption);
@@ -95,7 +90,6 @@ exports.getVacancyById = async (req, res) => {
     res.json(vacancy);
   } catch (error) {
     console.error(error.message);
-    // Если ID невалидный, Mongoose выдаст ошибку, которую мы обработаем
     if (error.kind === 'ObjectId') {
       return res.status(404).json({ msg: 'Vacancy not found' });
     }
@@ -125,7 +119,6 @@ exports.updateVacancy = async (req, res) => {
     }
 
     // Проверяем, является ли текущий пользователь автором вакансии
-    // vacancy.company - это ObjectId, req.user.id - это строка. Приводим к строке для сравнения.
     if (vacancy.company.toString() !== req.user.id) {
       return res
         .status(403)
@@ -162,7 +155,7 @@ exports.deleteVacancy = async (req, res) => {
         .json({ msg: 'User not authorized to delete this vacancy' });
     }
 
-    await vacancy.deleteOne(); // Используем новый метод вместо .remove()
+    await vacancy.deleteOne();
 
     res.json({ msg: 'Vacancy removed successfully' });
   } catch (error) {

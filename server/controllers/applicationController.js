@@ -19,13 +19,11 @@ exports.createApplication = async (req, res) => {
   const { vacancyId, coverLetter } = req.body;
 
   try {
-    // Проверяем, существует ли вакансия
     const vacancy = await Vacancy.findById(vacancyId);
     if (!vacancy) {
       return res.status(404).json({ msg: 'Vacancy not found' });
     }
 
-    // Проверяем, не откликался ли студент уже
     const existingApplication = await Application.findOne({
       vacancy: vacancyId,
       applicant: req.user.id,

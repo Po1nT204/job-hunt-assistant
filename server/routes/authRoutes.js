@@ -4,7 +4,7 @@ const { registerUser, loginUser } = require('../controllers/authController');
 
 const router = express.Router();
 
-// Правила валидации для регистрации, взятые из нашего api-spec.yaml
+// Правила валидации для регистрации
 const registerValidation = [
   body('name', 'Name is required').not().isEmpty(),
   body('email', 'Please include a valid email').isEmail(),
@@ -17,16 +17,16 @@ const registerValidation = [
   ]),
 ];
 
-// @route   POST /api/auth/register
-// @desc    Register a new user
-// @access  Public
-router.post('/register', registerValidation, registerUser);
-
 // Правила валидации для логина
 const loginValidation = [
   body('email', 'Please include a valid email').isEmail(),
   body('password', 'Password is required').exists(),
 ];
+
+// @route   POST /api/auth/register
+// @desc    Register a new user
+// @access  Public
+router.post('/register', registerValidation, registerUser);
 
 // @route   POST /api/auth/login
 // @desc    Authenticate user & get token

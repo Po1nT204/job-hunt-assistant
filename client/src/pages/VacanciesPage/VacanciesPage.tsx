@@ -13,10 +13,8 @@ import {
   Select,
 } from '@mui/material';
 import api from '../../shared/api/axios';
-import { IVacancy } from '../../shared/types/types';
+import { IVacancy, Locations } from '../../shared/types/types';
 import { VacancyCard } from '../../entities/VacancyCard';
-
-const locations = ['Москва', 'Санкт-Петербург', 'Казань', 'Новосибирск'];
 
 export const VacanciesPage = () => {
   const [vacancies, setVacancies] = useState<IVacancy[]>([]);
@@ -81,7 +79,7 @@ export const VacanciesPage = () => {
                 onChange={(e) => setLocationFilter(e.target.value)}
               >
                 <MenuItem value='all'>Все города</MenuItem>
-                {locations.map((loc) => (
+                {Object.values(Locations).map((loc) => (
                   <MenuItem key={loc} value={loc}>
                     {loc}
                   </MenuItem>

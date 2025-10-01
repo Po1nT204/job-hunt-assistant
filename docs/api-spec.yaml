@@ -33,7 +33,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserAuthResponse'
+                $ref: '#/components/schemas/AuthTokenResponse'
         '400':
           description: Ошибка валидации данных
           content:
@@ -59,7 +59,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserAuthResponse'
+                $ref: '#/components/schemas/AuthTokenResponse'
         '401':
           description: Неверный логин или пароль
 
@@ -92,6 +92,12 @@ paths:
           in: query
           schema: { type: string }
           description: Фильтр по городу
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [default, salary_asc, salary_desc]
+          description: Параметр сортировки
       responses:
         '200':
           description: Список вакансий
@@ -150,8 +156,60 @@ paths:
                 $ref: '#/components/schemas/Vacancy'
         '404':
           description: Вакансия не найдена
+    put:
+      tags: [Vacancies]
+      summary: Обновить существующую вакансию
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: vacancyId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVacancy'
+      responses:
+        '200':
+          description: Вакансия успешно обновлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vacancy'
+        '400':
+          description: Ошибка валидации
+        '401':
+          description: Не авторизован
+        '403':
+          description: Нет прав для редактирования
+        '404':
+          description: Вакансия не найдена
+    delete:
+      tags: [Vacancies]
+      summary: Удалить вакансию
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: vacancyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Вакансия успешно удалена
+        '401':
+          description: Не авторизован
+        '403':
+          description: Нет прав для удаления
+        '404':
+          description: Вакансия не найдена
 
-  /applications:
+  /applications/my:
     get:
       tags: [Applications]
       summary: Получить список моих откликов
@@ -244,15 +302,6 @@ components:
       required:
         - email
         - password
-
-    UserAuthResponse:
-      type: object
-      properties:
-        token:
-          type: string
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-        user:
-          $ref: '#/components/schemas/User'
 
     User:
       type: object
@@ -382,3 +431,10 @@ components:
                 example: Пароль должен содержать минимум 8 символов
       required:
         - message
+
+    AuthTokenResponse:
+    type: object
+    properties:
+      token:
+        type: string
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...

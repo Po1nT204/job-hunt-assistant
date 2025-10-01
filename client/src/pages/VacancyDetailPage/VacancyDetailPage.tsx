@@ -10,11 +10,12 @@ import {
   TextField,
 } from '@mui/material';
 import { getVacancyById } from '../../shared/api/vacancyService';
+import { createApplication } from '../../shared/api/applicationService';
 import { IApplicationData, IVacancy } from '../../shared/types/types';
 import { useAuth } from '../../app/providers/AuthProvider';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { createApplication } from '../../shared/api/applicationService';
+import { AxiosError } from 'axios';
 
 export const VacancyDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -59,10 +60,10 @@ export const VacancyDetailPage = () => {
       await createApplication({ ...formData, vacancyId: id });
       toast.success('Ваш отклик успешно отправлен!');
       setShowApplyForm(false);
-      // В будущем здесь можно добавить логику, чтобы скрыть кнопку "Откликнуться" навсегда
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as AxiosError<{ msg: string }>;
       const errorMessage =
-        err.response?.data?.msg || 'Ошибка при отправке отклика';
+        error.response?.data?.msg || 'Ошибка при отправке отклика';
       toast.error(errorMessage);
       console.error(err);
     } finally {

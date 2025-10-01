@@ -29,7 +29,7 @@ const UserSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // Добавляет поля createdAt и updatedAt
+    timestamps: true,
   }
 );
 

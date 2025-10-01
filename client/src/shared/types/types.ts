@@ -49,3 +49,12 @@ export interface IVacancyData {
   location: string;
   salary?: number;
 }
+
+export enum Locations {
+  Moscow = 'Москва',
+  SaintPetersburg = 'Санкт-Петербург',
+  Kazan = 'Казань',
+  Novosibirsk = 'Новосибирск',
+  Ekaterinburg = 'Екатеринбург',
+  Remote = 'Удаленно',
+}

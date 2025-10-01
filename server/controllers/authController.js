@@ -4,7 +4,6 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
 exports.registerUser = async (req, res) => {
-  // 1. Проверяем результаты валидации
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -13,7 +12,6 @@ exports.registerUser = async (req, res) => {
   const { name, email, password, role } = req.body;
 
   try {
-    // 2. Проверяем, не существует ли уже пользователь
     let user = await User.findOne({ email });
 
     if (user) {
@@ -22,7 +20,6 @@ exports.registerUser = async (req, res) => {
         .json({ msg: 'User with this email already exists' });
     }
 
-    // 3. Создаем нового пользователя (пароль будет захэширован Mongoose pre-save hook'ом)
     user = new User({
       name,
       email,
@@ -32,7 +29,6 @@ exports.registerUser = async (req, res) => {
 
     await user.save();
 
-    // 4. Создаем и возвращаем JWT токен
     const payload = {
       user: {
         id: user.id,
@@ -55,7 +51,6 @@ exports.registerUser = async (req, res) => {
 };
 
 exports.loginUser = async (req, res) => {
-  // Проверяем результаты валидации
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -64,23 +59,17 @@ exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Ищем пользователя по email
     const user = await User.findOne({ email }).select('+password');
 
-    // Если пользователя нет, возвращаем ошибку
     if (!user) {
       return res.status(401).json({ msg: 'Invalid credentials' });
     }
 
-    // Сравниваем введенный пароль с хэшем в базе данных
     const isMatch = await bcrypt.compare(password, user.password);
-
-    // Если пароли не совпадают, возвращаем ошибку
     if (!isMatch) {
       return res.status(401).json({ msg: 'Invalid credentials' });
     }
 
-    // Если все хорошо, создаем и возвращаем JWT токен
     const payload = {
       user: {
         id: user.id,

@@ -13,6 +13,7 @@ import {
 import { toast } from 'react-toastify';
 import { getVacancyById, updateVacancy } from '../../shared/api/vacancyService';
 import { IVacancyData } from '../../shared/types/types';
+import { AxiosError } from 'axios';
 
 export const VacancyEditPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -31,8 +32,11 @@ export const VacancyEditPage = () => {
       try {
         const vacancy = await getVacancyById(id);
         reset(vacancy);
-      } catch (error) {
-        toast.error('Не удалось загрузить данные вакансии');
+      } catch (err) {
+        const error = err as AxiosError<{ msg: string }>;
+        const errorMessage =
+          error.response?.data?.msg || 'Не удалось загрузить данные вакансии';
+        toast.error(errorMessage);
         navigate('/profile');
       } finally {
         setIsLoading(false);
@@ -47,8 +51,10 @@ export const VacancyEditPage = () => {
       await updateVacancy(id, formData);
       toast.success('Вакансия успешно обновлена!');
       navigate('/profile');
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Ошибка при обновлении');
+    } catch (err) {
+      const error = err as AxiosError<{ msg: string }>;
+      const errorMessage = error.response?.data?.msg || 'Ошибка при обновлении';
+      toast.error(errorMessage);
       console.error(err);
     }
   };
@@ -61,7 +67,6 @@ export const VacancyEditPage = () => {
         <Typography component='h1' variant='h4' gutterBottom>
           Редактирование вакансии
         </Typography>
-        {/* Форма точно такая же, как при создании */}
         {isLoading ? (
           <Box display='flex' justifyContent='center' sx={{ my: 4 }}>
             <CircularProgress />

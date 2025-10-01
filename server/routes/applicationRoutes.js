@@ -19,7 +19,6 @@ const createApplicationValidation = [
   ).isLength({ min: 50, max: 2000 }),
 ];
 
-// Применяем валидацию к роуту
 router
   .route('/')
   .post(protect, isStudent, createApplicationValidation, createApplication);

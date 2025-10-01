@@ -11,6 +11,7 @@ import {
 import { toast } from 'react-toastify';
 import { createVacancy } from '../../shared/api/vacancyService';
 import { IVacancyData } from '../../shared/types/types';
+import { AxiosError } from 'axios';
 
 export const VacancyCreatePage = () => {
   const navigate = useNavigate();
@@ -24,11 +25,12 @@ export const VacancyCreatePage = () => {
     try {
       await createVacancy(formData);
       toast.success('Вакансия успешно создана!');
-      navigate('/profile'); // Возвращаем на страницу профиля
-    } catch (err: any) {
-      toast.error(
-        err.response?.data?.message || 'Ошибка при создании вакансии'
-      );
+      navigate('/profile');
+    } catch (err) {
+      const error = err as AxiosError<{ msg: string }>;
+      const errorMessage =
+        error.response?.data?.msg || 'Ошибка при создании вакансии';
+      toast.error(errorMessage);
       console.error(err);
     }
   };

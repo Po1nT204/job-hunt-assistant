@@ -13,6 +13,7 @@ import { useAuth } from '../../app/providers/AuthProvider';
 import { login } from '../../shared/api/authService';
 import { ILoginData } from '../../shared/types/types';
 import api from '../../shared/api/axios';
+import { AxiosError } from 'axios';
 
 export const LoginPage = () => {
   const { setUser } = useAuth();
@@ -33,9 +34,10 @@ export const LoginPage = () => {
 
       toast.success('Вы успешно вошли!');
       navigate('/vacancies');
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as AxiosError<{ msg: string }>;
       const errorMessage =
-        err.response?.data?.msg || 'Произошла ошибка при входе';
+        error.response?.data?.msg || 'Произошла ошибка при входе';
       toast.error(errorMessage);
       console.error(err);
     }

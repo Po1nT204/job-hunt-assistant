@@ -3,7 +3,7 @@ import { Box, Typography, CircularProgress } from '@mui/material';
 import api from '../../shared/api/axios';
 import { IVacancy } from '../../shared/types/types';
 import { VacancyCard } from '../../entities';
-import { IFilterValues, FilterVacancies } from '../../features/FilterVacancies';
+import { IFilterValues, FilterVacancies } from '../../features';
 
 export const VacanciesPage = () => {
   const [vacancies, setVacancies] = useState<IVacancy[]>([]);

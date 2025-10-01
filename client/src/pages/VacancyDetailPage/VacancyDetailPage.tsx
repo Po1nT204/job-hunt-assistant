@@ -7,15 +7,11 @@ import {
   Paper,
   Divider,
   Button,
-  TextField,
 } from '@mui/material';
 import { getVacancyById } from '../../shared/api/vacancyService';
-import { createApplication } from '../../shared/api/applicationService';
-import { IApplicationData, IVacancy } from '../../shared/types/types';
+import { IVacancy } from '../../shared/types/types';
 import { useAuth } from '../../app/providers/AuthProvider';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
-import { AxiosError } from 'axios';
+import { ApplyToVacancy } from '../../features';
 
 export const VacancyDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,14 +21,7 @@ export const VacancyDetailPage = () => {
   const [vacancy, setVacancy] = useState<IVacancy | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showApplyForm, setShowApplyForm] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IApplicationData>();
+  const [isApplied, setIsApplied] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -51,24 +40,8 @@ export const VacancyDetailPage = () => {
     fetchVacancy();
   }, [id]);
 
-  const onApplicationSubmit: SubmitHandler<IApplicationData> = async (
-    formData
-  ) => {
-    if (!id) return;
-    setIsSubmitting(true);
-    try {
-      await createApplication({ ...formData, vacancyId: id });
-      toast.success('Ваш отклик успешно отправлен!');
-      setShowApplyForm(false);
-    } catch (err) {
-      const error = err as AxiosError<{ msg: string }>;
-      const errorMessage =
-        error.response?.data?.msg || 'Ошибка при отправке отклика';
-      toast.error(errorMessage);
-      console.error(err);
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleApplySuccess = () => {
+    setIsApplied(true);
   };
 
   if (loading) {
@@ -108,54 +81,13 @@ export const VacancyDetailPage = () => {
         {vacancy.description}
       </Typography>
       <Box mt={4}>
-        {/* Показываем кнопку только если пользователь - студент */}
-        {user?.role === 'student' && !showApplyForm && (
-          <Button variant='contained' onClick={() => setShowApplyForm(true)}>
-            Подать отклик
-          </Button>
+        {user?.role === 'student' && !isApplied && id && (
+          <ApplyToVacancy vacancyId={id} onSuccess={handleApplySuccess} />
         )}
-
-        {/* Форма отклика */}
-        {showApplyForm && (
-          <Box
-            component='form'
-            onSubmit={handleSubmit(onApplicationSubmit)}
-            noValidate
-          >
-            <Typography variant='h6' gutterBottom>
-              Ваше сопроводительное письмо
-            </Typography>
-            <TextField
-              margin='normal'
-              required
-              fullWidth
-              multiline
-              rows={6}
-              id='coverLetter'
-              label='Расскажите о себе, о своем опыте и компетенциях. Напишите, почему вы подходите на эту позицию'
-              {...register('coverLetter', {
-                required: 'Сопроводительное письмо обязательно',
-                minLength: {
-                  value: 50,
-                  message: 'Минимум 50 символов',
-                },
-              })}
-              error={!!errors.coverLetter}
-              helperText={errors.coverLetter?.message}
-            />
-            <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
-              <Button type='submit' variant='contained' disabled={isSubmitting}>
-                {isSubmitting ? 'Отправка...' : 'Отправить отклик'}
-              </Button>
-              <Button
-                variant='outlined'
-                onClick={() => setShowApplyForm(false)}
-                disabled={isSubmitting}
-              >
-                Отмена
-              </Button>
-            </Box>
-          </Box>
+        {isApplied && (
+          <Typography variant='h6' color='success.main'>
+            Вы успешно откликнулись на эту вакансию!
+          </Typography>
         )}
       </Box>
     </Paper>

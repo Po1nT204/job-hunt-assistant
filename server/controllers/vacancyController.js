@@ -6,7 +6,39 @@ const Vacancy = require('../models/Vacancy');
 // @access  Public
 exports.getVacancies = async (req, res) => {
   try {
-    const vacancies = await Vacancy.find().populate('company', 'name email');
+    // Создаем объект для фильтрации
+    const filter = {};
+
+    // 1. Обработка поискового запроса (search)
+    if (req.query.search) {
+      const searchRegex = new RegExp(req.query.search, 'i'); // 'i' для поиска без учета регистра
+      // Ищем совпадения в названии ИЛИ в описании
+      filter.$or = [{ title: searchRegex }, { description: searchRegex }];
+    }
+
+    // 2. Обработка фильтра по местоположению (location)
+    if (req.query.location && req.query.location !== 'all') {
+      const locationRegex = new RegExp(`^${req.query.location}$`, 'i');
+      filter.location = locationRegex;
+    }
+
+    let sortOption = {};
+    if (req.query.sort === 'salary_asc') {
+      // Сортировка по полю salary по возрастанию (1)
+      sortOption = { salary: 1 };
+    } else if (req.query.sort === 'salary_desc') {
+      // Сортировка по полю salary по убыванию (-1)
+      sortOption = { salary: -1 };
+    } else {
+      // По умолчанию сортируем по дате создания (новые вверху)
+      sortOption = { createdAt: -1 };
+    }
+
+    // 3. Выполняем поиск с учетом созданных фильтров
+    const vacancies = await Vacancy.find(filter)
+      .populate('company', 'name email')
+      .sort(sortOption);
+
     res.json(vacancies);
   } catch (error) {
     console.error(error.message);

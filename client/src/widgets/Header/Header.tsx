@@ -26,7 +26,7 @@ export const Header = () => {
           to='/'
           sx={{ flexGrow: 1, color: 'inherit', textDecoration: 'none' }}
         >
-          Job Platform
+          Job Hunt Assistant
         </Typography>
         <Box>
           <Button color='inherit' component={Link} to='/vacancies'>

@@ -4,26 +4,11 @@ import {
   Paper,
   Divider,
   List,
-  ListItem,
-  ListItemText,
   CircularProgress,
-  Chip,
 } from '@mui/material';
-import { getMyApplications } from '../../shared/api/applicationService';
-import { IApplication } from '../../shared/types/types';
-
-// Хелпер для отображения статуса в красивом виде
-const statusChip = (status: IApplication['status']) => {
-  const statusMap = {
-    pending: { label: 'В обработке', color: 'warning' as const },
-    reviewed: { label: 'Рассмотрено', color: 'info' as const },
-    accepted: { label: 'Принято', color: 'success' as const },
-    rejected: { label: 'Отклонено', color: 'error' as const },
-  };
-  return (
-    <Chip label={statusMap[status].label} color={statusMap[status].color} />
-  );
-};
+import { getMyApplications } from '../../../shared/api/applicationService';
+import { IApplication } from '../../../shared/types/types';
+import { ApplicationCard } from '../../../entities';
 
 export const StudentProfile = () => {
   const [applications, setApplications] = useState<IApplication[]>([]);
@@ -59,15 +44,7 @@ export const StudentProfile = () => {
       ) : applications.length > 0 ? (
         <List>
           {applications.map((app) => (
-            <ListItem key={app._id} divider>
-              <ListItemText
-                primary={`Вакансия: ${app.vacancy.title}`}
-                secondary={`Отправлено: ${new Date(
-                  app.createdAt
-                ).toLocaleDateString()}`}
-              />
-              {statusChip(app.status)}
-            </ListItem>
+            <ApplicationCard key={app._id} application={app} />
           ))}
         </List>
       ) : (

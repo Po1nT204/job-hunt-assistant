@@ -1,48 +1,13 @@
 import { useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
 import { Box, Button, TextField, Typography } from '@mui/material';
-import { toast } from 'react-toastify';
-import { AxiosError } from 'axios';
-import { createApplication } from '../../../shared/api/applicationService';
+import { useApplyVacancy } from '../model/useApplyVacancy';
+import { ApplyToVacancyProps } from '../../../../shared/types/types';
 
-interface ApplyToVacancyProps {
-  vacancyId: string;
-  onSuccess: () => void;
-}
-
-interface IApplyForm {
-  coverLetter: string;
-}
-
-export const ApplyToVacancy = ({
-  vacancyId,
-  onSuccess,
-}: ApplyToVacancyProps) => {
+export const ApplyToVacancy = ({ vacancyId }: ApplyToVacancyProps) => {
+  const { register, handleSubmit, errors, isSubmitting } = useApplyVacancy(
+    vacancyId as unknown as ApplyToVacancyProps
+  );
   const [showForm, setShowForm] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IApplyForm>();
-
-  const onSubmit: SubmitHandler<IApplyForm> = async (formData) => {
-    setIsSubmitting(true);
-    try {
-      await createApplication({ ...formData, vacancyId });
-      toast.success('Ваш отклик успешно отправлен!');
-      onSuccess();
-      setShowForm(false);
-    } catch (err) {
-      const error = err as AxiosError<{ msg: string }>;
-      const errorMessage =
-        error.response?.data?.msg || 'Ошибка при отправке отклика';
-      toast.error(errorMessage);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   if (!showForm) {
     return (
@@ -53,7 +18,7 @@ export const ApplyToVacancy = ({
   }
 
   return (
-    <Box component='form' onSubmit={handleSubmit(onSubmit)} noValidate>
+    <Box component='form' onSubmit={handleSubmit} noValidate>
       <Typography variant='h6' gutterBottom>
         Ваше сопроводительное письмо
       </Typography>

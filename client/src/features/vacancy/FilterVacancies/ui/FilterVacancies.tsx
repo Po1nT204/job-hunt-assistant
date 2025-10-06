@@ -9,7 +9,7 @@ import {
   MenuItem,
   Select,
 } from '@mui/material';
-import { Locations } from '../../../shared/types/types';
+import { Locations } from '../../../../shared/types/types';
 
 export interface IFilterValues {
   search: string;

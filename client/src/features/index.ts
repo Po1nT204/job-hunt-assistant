@@ -1,2 +1,2 @@
-export * from './ApplyToVacancy/index';
-export * from './FilterVacancies/index';
+export * from './vacancy/ApplyToVacancy/index';
+export * from './vacancy/FilterVacancies/index';

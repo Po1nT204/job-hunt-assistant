@@ -58,3 +58,11 @@ export enum Locations {
   Ekaterinburg = 'Екатеринбург',
   Remote = 'Удаленно',
 }
+
+export interface IApplyForm {
+  coverLetter: string;
+}
+
+export interface ApplyToVacancyProps {
+  vacancyId: string;
+}

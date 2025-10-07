@@ -51,21 +51,22 @@ export const CreateVacancyForm = () => {
         />
         <TextField
           margin='normal'
+          required
           fullWidth
           id='salary'
-          label='Зарплата (необязательно)'
+          label='Зарплата в рублях'
           type='number'
-          {...register('salary')}
+          {...register('salary', { required: 'Зарплата обязательна' })}
           error={!!errors.salary}
           helperText={errors.salary?.message}
           disabled={isSubmitting}
         />
-        <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
+        <Box sx={{ mt: 3, display: 'flex', gap: 2, alignItems: 'center' }}>
           <Button type='submit' variant='contained'>
             Создать вакансию
           </Button>
           <Link component={RouterLink} to='/profile' variant='body2'>
-            {'Отмена'}
+            Отмена
           </Link>
         </Box>
       </Box>

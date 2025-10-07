@@ -36,6 +36,7 @@ export const ApplyToVacancy = ({ vacancyId }: ApplyToVacancyProps) => {
         })}
         error={!!errors.coverLetter}
         helperText={errors.coverLetter?.message}
+        disabled={isSubmitting}
       />
       <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
         <Button type='submit' variant='contained' disabled={isSubmitting}>

@@ -4,10 +4,10 @@ import { useApplyVacancy } from '../model/useApplyVacancy';
 import { ApplyToVacancyProps } from '../../../../shared/types/types';
 
 export const ApplyToVacancy = ({ vacancyId }: ApplyToVacancyProps) => {
-  const { register, handleSubmit, errors, isSubmitting } = useApplyVacancy(
-    vacancyId as unknown as ApplyToVacancyProps
-  );
   const [showForm, setShowForm] = useState(false);
+  const { register, handleSubmit, errors, isSubmitting } = useApplyVacancy({
+    vacancyId,
+  });
 
   if (!showForm) {
     return (

@@ -6,8 +6,7 @@ import {
   List,
   CircularProgress,
 } from '@mui/material';
-import { getMyApplications } from '../../../shared/api/applicationService';
-import { IApplication } from '../../../shared/types/types';
+import { getMyApplications, IApplication } from '../../../shared/index';
 import { ApplicationCard } from '../../../entities';
 
 export const StudentProfile = () => {

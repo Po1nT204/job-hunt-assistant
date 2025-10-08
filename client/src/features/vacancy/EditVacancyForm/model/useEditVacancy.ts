@@ -6,8 +6,8 @@ import { toast } from 'react-toastify';
 import {
   getVacancyById,
   updateVacancy,
-} from '../../../../shared/api/vacancyService';
-import { IVacancyData } from '../../../../shared/types/types';
+  IVacancyData,
+} from '../../../../shared/index';
 
 interface EditVacancyProps {
   onLoad: () => void;

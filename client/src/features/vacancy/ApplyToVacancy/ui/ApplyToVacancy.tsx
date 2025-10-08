@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { useApplyVacancy } from '../model/useApplyVacancy';
-import { ApplyToVacancyProps } from '../../../../shared/types/types';
+import { ApplyToVacancyProps } from '../../../../shared/index';
 
 export const ApplyToVacancy = ({ vacancyId }: ApplyToVacancyProps) => {
   const [showForm, setShowForm] = useState(false);

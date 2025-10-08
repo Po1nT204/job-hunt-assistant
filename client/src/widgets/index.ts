@@ -1,3 +1,3 @@
-export * from './Header/index';
-export * from './profile/StudentProfile/index';
-export * from './profile/EmployerProfile/index';
+export * from './Header/Header';
+export * from './profile/StudentProfile/StudentProfile';
+export * from './profile/EmployerProfile/EmployerProfile';

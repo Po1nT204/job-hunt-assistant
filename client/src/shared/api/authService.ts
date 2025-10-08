@@ -1,5 +1,5 @@
 import api from './axios';
-import { IRegisterData, ILoginData } from '../types/types';
+import { IRegisterData, ILoginData } from '../index';
 
 interface AuthResponse {
   token: string;

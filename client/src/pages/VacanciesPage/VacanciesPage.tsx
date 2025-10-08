@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Box, Typography, CircularProgress } from '@mui/material';
 import api from '../../shared/api/axios';
-import { IVacancy } from '../../shared/types/types';
+import { IVacancy } from '../../shared/index';
 import { VacancyCard } from '../../entities';
 import { IFilterValues, FilterVacancies } from '../../features';
 

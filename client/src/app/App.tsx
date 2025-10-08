@@ -12,7 +12,7 @@ import {
   VacancyDetailPage,
   VacancyEditPage,
 } from '../pages';
-import { Header } from '../widgets/Header';
+import { Header } from '../widgets/index';
 import { AuthProvider } from './providers/AuthProvider';
 import { ProtectedRoute } from './providers/ProtectedRoute';
 

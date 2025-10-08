@@ -15,11 +15,7 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify';
-import {
-  getVacancies,
-  deleteVacancy,
-} from '../../../shared/api/vacancyService';
-import { IVacancy } from '../../../shared/types/types';
+import { getVacancies, deleteVacancy, IVacancy } from '../../../shared/index';
 import { useAuth } from '../../../app/providers/AuthProvider';
 
 export const EmployerProfile = () => {

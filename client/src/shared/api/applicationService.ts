@@ -1,5 +1,5 @@
 import api from './axios';
-import { IApplication, IApplicationData } from '../types/types';
+import { IApplication, IApplicationData } from '../index';
 
 // Мы ожидаем, что в ответ придет созданный отклик
 // (хотя мы его пока не будем использовать, тип лучше определить)

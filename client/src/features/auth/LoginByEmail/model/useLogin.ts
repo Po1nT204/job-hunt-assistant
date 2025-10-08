@@ -2,8 +2,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../../../app/providers/AuthProvider';
-import { login as loginUser } from '../../../../shared/api/authService';
-import { ILoginData } from '../../../../shared/types/types';
+import { ILoginData, login as loginUser } from '../../../../shared/index';
 import api from '../../../../shared/api/axios';
 import { AxiosError } from 'axios';
 

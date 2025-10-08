@@ -1,11 +1,11 @@
 import { AxiosError } from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { createApplication } from '../../../../shared/api/applicationService';
 import {
+  createApplication,
   ApplyToVacancyProps,
   IApplyForm,
-} from '../../../../shared/types/types';
+} from '../../../../shared/index';
 
 export const useApplyVacancy = ({ vacancyId }: ApplyToVacancyProps) => {
   const {

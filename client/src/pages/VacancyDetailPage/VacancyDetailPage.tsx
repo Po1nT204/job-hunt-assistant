@@ -8,8 +8,7 @@ import {
   Divider,
   Button,
 } from '@mui/material';
-import { getVacancyById } from '../../shared/api/vacancyService';
-import { IVacancy } from '../../shared/types/types';
+import { getVacancyById, IVacancy } from '../../shared/index';
 import { useAuth } from '../../app/providers/AuthProvider';
 import { ApplyToVacancy } from '../../features';
 

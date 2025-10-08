@@ -2,8 +2,7 @@ import { AxiosError } from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { createVacancy } from '../../../../shared/api/vacancyService';
-import { IVacancyData } from '../../../../shared/types/types';
+import { createVacancy, IVacancyData } from '../../../../shared/index';
 
 export const useCreateVacancy = () => {
   const navigate = useNavigate();

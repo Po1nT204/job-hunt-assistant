@@ -1,5 +1,5 @@
 import api from './axios';
-import { IVacancy, IVacancyData } from '../types/types';
+import { IVacancy, IVacancyData } from '../index';
 
 export const getVacancyById = async (id: string): Promise<IVacancy> => {
   const { data } = await api.get<IVacancy>(`/vacancies/${id}`);

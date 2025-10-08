@@ -1,5 +1,5 @@
 import { ListItem, ListItemText, Chip } from '@mui/material';
-import { IApplication } from '../../../shared/types/types';
+import { IApplication } from '../../../shared/index';
 
 // Хелпер для отображения статуса в красивом виде
 const statusChip = (status: IApplication['status']) => {

@@ -6,7 +6,7 @@ import {
   useContext,
   useCallback,
 } from 'react';
-import { IUser } from '../../shared/types/types';
+import { IUser } from '../../shared/index';
 import api from '../../shared/api/axios';
 
 interface AuthContextType {

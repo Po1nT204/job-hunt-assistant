@@ -1,48 +1,13 @@
 import { useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
 import { Box, Button, TextField, Typography } from '@mui/material';
-import { toast } from 'react-toastify';
-import { AxiosError } from 'axios';
-import { createApplication } from '../../../shared/api/applicationService';
+import { useApplyVacancy } from '../model/useApplyVacancy';
+import { ApplyToVacancyProps } from '../../../../shared/index';
 
-interface ApplyToVacancyProps {
-  vacancyId: string;
-  onSuccess: () => void;
-}
-
-interface IApplyForm {
-  coverLetter: string;
-}
-
-export const ApplyToVacancy = ({
-  vacancyId,
-  onSuccess,
-}: ApplyToVacancyProps) => {
+export const ApplyToVacancy = ({ vacancyId }: ApplyToVacancyProps) => {
   const [showForm, setShowForm] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IApplyForm>();
-
-  const onSubmit: SubmitHandler<IApplyForm> = async (formData) => {
-    setIsSubmitting(true);
-    try {
-      await createApplication({ ...formData, vacancyId });
-      toast.success('Ваш отклик успешно отправлен!');
-      onSuccess();
-      setShowForm(false);
-    } catch (err) {
-      const error = err as AxiosError<{ msg: string }>;
-      const errorMessage =
-        error.response?.data?.msg || 'Ошибка при отправке отклика';
-      toast.error(errorMessage);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const { register, handleSubmit, errors, isSubmitting } = useApplyVacancy({
+    vacancyId,
+  });
 
   if (!showForm) {
     return (
@@ -53,7 +18,7 @@ export const ApplyToVacancy = ({
   }
 
   return (
-    <Box component='form' onSubmit={handleSubmit(onSubmit)} noValidate>
+    <Box component='form' onSubmit={handleSubmit} noValidate>
       <Typography variant='h6' gutterBottom>
         Ваше сопроводительное письмо
       </Typography>
@@ -71,6 +36,7 @@ export const ApplyToVacancy = ({
         })}
         error={!!errors.coverLetter}
         helperText={errors.coverLetter?.message}
+        disabled={isSubmitting}
       />
       <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
         <Button type='submit' variant='contained' disabled={isSubmitting}>

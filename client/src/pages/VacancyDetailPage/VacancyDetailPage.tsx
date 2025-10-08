@@ -8,8 +8,7 @@ import {
   Divider,
   Button,
 } from '@mui/material';
-import { getVacancyById } from '../../shared/api/vacancyService';
-import { IVacancy } from '../../shared/types/types';
+import { getVacancyById, IVacancy } from '../../shared/index';
 import { useAuth } from '../../app/providers/AuthProvider';
 import { ApplyToVacancy } from '../../features';
 
@@ -21,7 +20,6 @@ export const VacancyDetailPage = () => {
   const [vacancy, setVacancy] = useState<IVacancy | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isApplied, setIsApplied] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -39,10 +37,6 @@ export const VacancyDetailPage = () => {
     };
     fetchVacancy();
   }, [id]);
-
-  const handleApplySuccess = () => {
-    setIsApplied(true);
-  };
 
   if (loading) {
     return (
@@ -81,14 +75,7 @@ export const VacancyDetailPage = () => {
         {vacancy.description}
       </Typography>
       <Box mt={4}>
-        {user?.role === 'student' && !isApplied && id && (
-          <ApplyToVacancy vacancyId={id} onSuccess={handleApplySuccess} />
-        )}
-        {isApplied && (
-          <Typography variant='h6' color='success.main'>
-            Вы успешно откликнулись на эту вакансию!
-          </Typography>
-        )}
+        {user?.role === 'student' && id && <ApplyToVacancy vacancyId={id} />}
       </Box>
     </Paper>
   );

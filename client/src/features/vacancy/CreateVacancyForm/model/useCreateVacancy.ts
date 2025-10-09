@@ -1,8 +1,11 @@
-import { AxiosError } from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { createVacancy, IVacancyData } from '../../../../shared/index';
+import {
+  createVacancy,
+  handleApiError,
+  IVacancyData,
+} from '../../../../shared/index';
 
 export const useCreateVacancy = () => {
   const navigate = useNavigate();
@@ -18,10 +21,7 @@ export const useCreateVacancy = () => {
       toast.success('Вакансия успешно создана!');
       navigate('/profile');
     } catch (err) {
-      const error = err as AxiosError<{ msg: string }>;
-      const errorMessage =
-        error.response?.data?.msg || 'Ошибка при создании вакансии';
-      toast.error(errorMessage);
+      toast.error(handleApiError(err));
       console.error(err);
     }
   };

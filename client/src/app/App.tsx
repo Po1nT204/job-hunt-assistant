@@ -12,7 +12,7 @@ import {
   VacancyDetailPage,
   VacancyEditPage,
 } from '../pages';
-import { Header } from '../widgets/index';
+import { Footer, Header } from '../widgets/index';
 import { AuthProvider } from './providers/AuthProvider';
 import { ProtectedRoute } from './providers/ProtectedRoute';
 
@@ -21,7 +21,7 @@ export const App = () => {
     <BrowserRouter>
       <AuthProvider>
         <Header />
-        <Container component='main' sx={{ mt: 4, mb: 4 }}>
+        <Container component='main' sx={{ mt: 4, mb: 4, flexGrow: 1 }}>
           <Routes>
             <Route path='/' element={<HomePage />} />
             <Route path='/login' element={<LoginPage />} />
@@ -53,8 +53,8 @@ export const App = () => {
               }
             />
           </Routes>
+          <Footer />
         </Container>
-        {/* Здесь будет Footer */}
         <ToastContainer position='bottom-right' autoClose={3000} />
       </AuthProvider>
     </BrowserRouter>

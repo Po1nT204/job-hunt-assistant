@@ -1,10 +1,10 @@
-import { AxiosError } from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../../../app/providers/AuthProvider';
 import api from '../../../../shared/api/axios';
 import {
+  handleApiError,
   IRegisterData,
   register as registerUser,
 } from '../../../../shared/index';
@@ -29,10 +29,7 @@ export const useRegister = () => {
       toast.success('Регистрация прошла успешно!');
       navigate('/vacancies');
     } catch (err) {
-      const error = err as AxiosError<{ msg: string }>;
-      const errorMessage =
-        error.response?.data?.msg || 'Произошла ошибка при регистрации';
-      toast.error(errorMessage);
+      toast.error(handleApiError(err));
       console.error(err);
     }
   };

@@ -1,10 +1,10 @@
-import { AxiosError } from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import {
   createApplication,
   ApplyToVacancyProps,
   IApplyForm,
+  handleApiError,
 } from '../../../../shared/index';
 
 export const useApplyVacancy = ({ vacancyId }: ApplyToVacancyProps) => {
@@ -19,10 +19,8 @@ export const useApplyVacancy = ({ vacancyId }: ApplyToVacancyProps) => {
       await createApplication({ ...formData, vacancyId });
       toast.success('Ваш отклик успешно отправлен!');
     } catch (err) {
-      const error = err as AxiosError<{ msg: string }>;
-      const errorMessage =
-        error.response?.data?.msg || 'Ошибка при отправке отклика';
-      toast.error(errorMessage);
+      toast.error(handleApiError(err));
+      console.error(err);
     }
   };
 

@@ -2,9 +2,12 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../../../app/providers/AuthProvider';
-import { ILoginData, login as loginUser } from '../../../../shared/index';
+import {
+  handleApiError,
+  ILoginData,
+  login as loginUser,
+} from '../../../../shared/index';
 import api from '../../../../shared/api/axios';
-import { AxiosError } from 'axios';
 
 export const useLogin = () => {
   const { setUser } = useAuth();
@@ -26,10 +29,7 @@ export const useLogin = () => {
       toast.success('Вы успешно вошли!');
       navigate('/vacancies');
     } catch (err) {
-      const error = err as AxiosError<{ msg: string }>;
-      const errorMessage =
-        error.response?.data?.msg || 'Произошла ошибка при входе';
-      toast.error(errorMessage);
+      toast.error(handleApiError);
       console.error(err);
     }
   };

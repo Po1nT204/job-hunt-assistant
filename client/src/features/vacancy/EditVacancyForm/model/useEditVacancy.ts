@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import { useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -7,6 +6,7 @@ import {
   getVacancyById,
   updateVacancy,
   IVacancyData,
+  handleApiError,
 } from '../../../../shared/index';
 
 interface EditVacancyProps {
@@ -30,10 +30,8 @@ export const useEditVacancy = ({ onLoad }: EditVacancyProps) => {
         const vacancy = await getVacancyById(id);
         reset(vacancy);
       } catch (err) {
-        const error = err as AxiosError<{ msg: string }>;
-        const errorMessage =
-          error.response?.data?.msg || 'Не удалось загрузить данные вакансии';
-        toast.error(errorMessage);
+        toast.error(handleApiError(err));
+        console.error(err);
         navigate('/profile');
       } finally {
         onLoad();
@@ -49,9 +47,7 @@ export const useEditVacancy = ({ onLoad }: EditVacancyProps) => {
       toast.success('Вакансия успешно обновлена!');
       navigate('/profile');
     } catch (err) {
-      const error = err as AxiosError<{ msg: string }>;
-      const errorMessage = error.response?.data?.msg || 'Ошибка при обновлении';
-      toast.error(errorMessage);
+      toast.error(handleApiError(err));
       console.error(err);
     }
   };

@@ -5,8 +5,14 @@ import {
   Divider,
   List,
   CircularProgress,
+  Button,
 } from '@mui/material';
-import { getMyApplications, IApplication } from '../../../shared/index';
+import { Link as RouterLink } from 'react-router-dom';
+import {
+  EmptyState,
+  getMyApplications,
+  IApplication,
+} from '../../../shared/index';
 import { ApplicationCard } from '../../../entities';
 
 export const StudentProfile = () => {
@@ -47,7 +53,11 @@ export const StudentProfile = () => {
           ))}
         </List>
       ) : (
-        <Typography>Вы еще не оставляли откликов.</Typography>
+        <EmptyState message='Вы еще не оставляли откликов.'>
+          <Button variant='contained' component={RouterLink} to='/vacancies'>
+            Посмотреть вакансии для откликов
+          </Button>
+        </EmptyState>
       )}
     </Paper>
   );

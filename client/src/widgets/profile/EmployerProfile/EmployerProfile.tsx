@@ -15,7 +15,12 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify';
-import { getVacancies, deleteVacancy, IVacancy } from '../../../shared/index';
+import {
+  getVacancies,
+  deleteVacancy,
+  IVacancy,
+  EmptyState,
+} from '../../../shared/index';
 import { useAuth } from '../../../app/providers/AuthProvider';
 
 export const EmployerProfile = () => {
@@ -101,7 +106,15 @@ export const EmployerProfile = () => {
           ))}
         </List>
       ) : (
-        <Typography>Вы еще не создали ни одной вакансии.</Typography>
+        <EmptyState message='Вы еще не создали ни одной вакансии.'>
+          <Button
+            variant='contained'
+            component={RouterLink}
+            to='/vacancies/new'
+          >
+            Создать первую вакансию
+          </Button>
+        </EmptyState>
       )}
     </Paper>
   );

@@ -1,11 +1,21 @@
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../app/providers/AuthProvider';
 import { toast } from 'react-toastify';
+import { MobileNav } from './MobileNav';
+import { DesktopNav } from './DesktopNav';
 
 export const Header = () => {
-  const { user, logout, isLoading } = useAuth();
+  const { logout, isLoading } = useAuth();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleLogout = () => {
     logout();
@@ -14,44 +24,29 @@ export const Header = () => {
   };
 
   if (isLoading) {
-    return null;
+    return (
+      <AppBar position='static'>
+        <Toolbar />
+      </AppBar>
+    );
   }
 
   return (
     <AppBar position='static'>
       <Toolbar>
         <Typography
-          variant='h6'
+          variant='h4'
           component={Link}
           to='/'
           sx={{ flexGrow: 1, color: 'inherit', textDecoration: 'none' }}
         >
           Job Hunt Assistant
         </Typography>
-        <Box>
-          <Button color='inherit' component={Link} to='/vacancies'>
-            Вакансии
-          </Button>
-          {user ? (
-            <>
-              <Button color='inherit' component={Link} to='/profile'>
-                Профиль
-              </Button>
-              <Button color='inherit' onClick={handleLogout}>
-                Выйти
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button color='inherit' component={Link} to='/login'>
-                Войти
-              </Button>
-              <Button color='inherit' component={Link} to='/register'>
-                Регистрация
-              </Button>
-            </>
-          )}
-        </Box>
+        {isMobile ? (
+          <MobileNav onLogout={handleLogout} />
+        ) : (
+          <DesktopNav onLogout={handleLogout} />
+        )}
       </Toolbar>
     </AppBar>
   );

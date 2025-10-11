@@ -8,7 +8,7 @@ export const VacancyEditPage = () => {
   if (!id) return <Typography>Вакансия не найдена.</Typography>;
 
   return (
-    <Container maxWidth='md'>
+    <Container maxWidth='xs' sx={{ px: { xs: 1, sm: 2 } }}>
       <EditVacancyForm />
     </Container>
   );

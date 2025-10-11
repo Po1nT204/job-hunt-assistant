@@ -3,7 +3,7 @@ import { RegisterByEmail } from '../../features/auth/RegisterByEmail/ui/Register
 
 export const RegisterPage = () => {
   return (
-    <Container maxWidth='xs'>
+    <Container maxWidth='xs' sx={{ px: { xs: 1, sm: 2 } }}>
       <RegisterByEmail />
     </Container>
   );

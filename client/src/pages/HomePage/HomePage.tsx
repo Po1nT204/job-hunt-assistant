@@ -6,7 +6,7 @@ export const HomePage = () => {
     <Box>
       <Container maxWidth='md' sx={{ textAlign: 'center', my: 8 }}>
         <Typography variant='h2' component='h1' fontWeight={700} gutterBottom>
-          Найди свою первую работу в кампусе
+          Найди свою первую работу в университете
         </Typography>
         <Typography variant='h5' color='text.secondary' paragraph>
           Централизованная платформа для поиска стажировок и временной работы

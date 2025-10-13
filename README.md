@@ -55,7 +55,7 @@
     ```bash
     cd server
     npm install
-    npm run dev
+    npm run start
     # Сервер будет доступен на http://localhost:5001
     ```
 
@@ -64,8 +64,8 @@
     ```bash
     cd client
     npm install
-    npm start
-    # Приложение откроется в браузере на http://localhost:3000
+    npm run dev
+    # Приложение откроется в браузере на http://localhost:5173
     ```
 
 Теперь приложение полностью готово к работе.

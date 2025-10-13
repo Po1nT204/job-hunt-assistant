@@ -5,7 +5,7 @@ export const HomePage = () => {
   return (
     <Box>
       <Container maxWidth='md' sx={{ textAlign: 'center', my: 8 }}>
-        <Typography variant='h2' component='h1' fontWeight={700} gutterBottom>
+        <Typography variant='h3' component='h1' fontWeight={600} gutterBottom>
           Найди свою первую работу в университете
         </Typography>
         <Typography variant='h5' color='text.secondary' paragraph>
